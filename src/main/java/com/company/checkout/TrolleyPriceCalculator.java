@@ -18,8 +18,9 @@ public class TrolleyPriceCalculator {
      * @return trolley price at checkout
      */
     public BigDecimal computeCheckoutPrice(List<String> tillInput) {
-        BigDecimal result = new BigDecimal("0.0");
+        OfferRulesEngine.loadOfferRules();
 
+        BigDecimal checkoutPrice = new BigDecimal("0.0");
         if (tillInput != null && !tillInput.isEmpty()) {
             //filter the input
             tillInput = filterTillInput(tillInput);
@@ -27,18 +28,25 @@ public class TrolleyPriceCalculator {
             //builds trolley
             Map<String, Integer> trolley = buildTrolley(tillInput);
 
+            //get offers applicable
+            List<Offer> offers = getOffersApplicable(trolley);
 
-        /*if (tillInput != null && !tillInput.isEmpty()) {
-            return tillInput.stream()
-                    .map(String::toUpperCase)
-                    .filter(Product::isProductInCatalog)
-                    .map(Product::getPrice)
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-        }*/
         }
-        return result;
+        return checkoutPrice;
     }
 
+    /**
+     * Gets the list of offers applicable against the offers engine rules
+     *
+     * @param trolley products with quantity
+     * @return offers applicable
+     */
+    private List<Offer> getOffersApplicable(Map<String, Integer> trolley) {
+        return trolley.entrySet().stream()
+                .map(OfferRulesEngine::findOffers)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
 
     /**
      * Filters the input to catalog products
