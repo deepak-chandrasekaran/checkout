@@ -19,6 +19,58 @@ public class TrolleyPriceCalculatorTest {
     }
 
     @Test
+    public void shouldReturnCheckoutPriceWithOfferOnOneProduct() {
+        //Given
+        ArrayList<String> trolleyItems = new ArrayList<>(Arrays.asList("APPLE", "APPLE", "ORANGE"));
+        BigDecimal expectedResult = new BigDecimal("0.85");
+
+        //When
+        BigDecimal actual = trolleyPriceCalculator.computeCheckoutPrice(trolleyItems);
+
+        //Then
+        Assert.assertTrue(expectedResult.compareTo(actual) == 0);
+    }
+
+    @Test
+    public void shouldReturnCheckoutPriceWithOfferOnBothProducts() {
+        //Given
+        ArrayList<String> trolleyItems = new ArrayList<>(Arrays.asList("APPLE", "APPLE", "ORANGE", "ORANGE", "ORANGE"));
+        BigDecimal expectedResult = new BigDecimal("1.10");
+
+        //When
+        BigDecimal actual = trolleyPriceCalculator.computeCheckoutPrice(trolleyItems);
+
+        //Then
+        Assert.assertTrue(expectedResult.compareTo(actual) == 0);
+    }
+
+    @Test
+    public void shouldReturnCheckoutPriceWithOfferAndInvalidProducts() {
+        //Given
+        ArrayList<String> trolleyItems = new ArrayList<>(Arrays.asList("APPLE", "APPLE", "sony", "panasonic", "ORANGE"));
+        BigDecimal expectedResult = new BigDecimal("0.85");
+
+        //When
+        BigDecimal actual = trolleyPriceCalculator.computeCheckoutPrice(trolleyItems);
+
+        //Then
+        Assert.assertTrue(expectedResult.compareTo(actual) == 0);
+    }
+
+    @Test
+    public void shouldReturnCheckoutPriceWithNoOfferOnAnyProduct() {
+        //Given
+        ArrayList<String> trolleyItems = new ArrayList<>(Arrays.asList("APPLE", "ORANGE"));
+        BigDecimal expectedResult = new BigDecimal("0.85");
+
+        //When
+        BigDecimal actual = trolleyPriceCalculator.computeCheckoutPrice(trolleyItems);
+
+        //Then
+        Assert.assertTrue(expectedResult.compareTo(actual) == 0);
+    }
+
+    @Test
     public void shouldReturnTotalTrolleyPriceWithCatalogProducts() {
         //Given
         ArrayList<String> trolleyItems = new ArrayList<>(Arrays.asList("APPLE", "APPLE", "ORANGE"));
