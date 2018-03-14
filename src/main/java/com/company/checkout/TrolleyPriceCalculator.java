@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /*
@@ -31,8 +33,35 @@ public class TrolleyPriceCalculator {
             //get offers applicable
             List<Offer> offers = getOffersApplicable(trolley);
 
+            //map offer by product
+            Map<String, Offer> offersByProduct = offers.stream()
+                    .collect(Collectors.toMap(offer -> offer.getProduct()
+                            .getProductName(), Function.identity()));
+
+            //compute the checkout price
+            checkoutPrice = computeCheckoutPrice(trolley, offersByProduct);
         }
+        System.out.println("Final trolley price is: £" + checkoutPrice);
         return checkoutPrice;
+    }
+
+    /**
+     * Computes the final checkout price of the trolley incl. offers applicable
+     *
+     * @param trolley         products with quantity
+     * @param offersByProduct offers applicable for product
+     * @return trolley price
+     */
+    private BigDecimal computeCheckoutPrice(Map<String, Integer> trolley, Map<String, Offer> offersByProduct) {
+        BigDecimal trolleyPrice;
+        trolleyPrice = trolley.keySet().stream()
+                .map(name -> Optional.ofNullable(offersByProduct.get(name))
+                        .map(Offer::computeDiscountedPrice)
+                        .orElseGet(() -> (Product.valueOf(name).getPrice()).multiply(BigDecimal.valueOf(trolley.get(name)))))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        trolleyPrice = trolleyPrice.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+        return trolleyPrice;
     }
 
     /**

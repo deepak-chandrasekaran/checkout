@@ -113,7 +113,7 @@ public class TrolleyPriceCalculatorTest {
     public void shouldReturnTotalTrolleyPriceWithCatalogProducts() {
         //Given
         ArrayList<String> trolleyItems = new ArrayList<>(Arrays.asList("APPLE", "APPLE", "ORANGE"));
-        BigDecimal expectedResult = new BigDecimal("1.45");
+        BigDecimal expectedResult = new BigDecimal("0.85");
 
         //When
         BigDecimal actual = trolleyPriceCalculator.computeCheckoutPrice(trolleyItems);

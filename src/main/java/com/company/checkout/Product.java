@@ -30,6 +30,14 @@ public enum Product {
         return Product.valueOf(productName).price;
     }
 
+    public String getProductName() {
+        return productName;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
     @Override
     public String toString() {
         return "Product name is " + productName + " and its unit price is " + String.format("£%.2f", price);

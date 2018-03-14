@@ -46,7 +46,7 @@ public class Offer {
         }
     }
 
-    Product getProduct() {
+    public Product getProduct() {
         return product;
     }
 
