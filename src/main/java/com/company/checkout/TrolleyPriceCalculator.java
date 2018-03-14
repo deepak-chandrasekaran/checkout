@@ -35,8 +35,7 @@ public class TrolleyPriceCalculator {
 
             //map offer by product
             Map<String, Offer> offersByProduct = offers.stream()
-                    .collect(Collectors.toMap(offer -> offer.getProduct()
-                            .getProductName(), Function.identity()));
+                    .collect(Collectors.toMap(offer -> offer.getProduct().getProductName(), Function.identity()));
 
             //compute the checkout price
             checkoutPrice = computeCheckoutPrice(trolley, offersByProduct);
@@ -57,11 +56,15 @@ public class TrolleyPriceCalculator {
         trolleyPrice = trolley.keySet().stream()
                 .map(name -> Optional.ofNullable(offersByProduct.get(name))
                         .map(Offer::computeDiscountedPrice)
-                        .orElseGet(() -> (Product.valueOf(name).getPrice()).multiply(BigDecimal.valueOf(trolley.get(name)))))
+                        .orElseGet(() -> computePrice(trolley, name)))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         trolleyPrice = trolleyPrice.setScale(2, BigDecimal.ROUND_HALF_UP);
 
         return trolleyPrice;
+    }
+
+    private BigDecimal computePrice(Map<String, Integer> trolley, String name) {
+        return (Product.valueOf(name).getPrice()).multiply(BigDecimal.valueOf(trolley.get(name)));
     }
 
     /**

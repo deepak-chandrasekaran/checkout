@@ -7,10 +7,10 @@ public class Offer {
     static final String BUY1_GET1_FREE = "Buy 1, get one free";
     static final String BUY3_FOR_THE_PRICE_OF2 = "3 for the price of 2";
 
-    private String name;
-    private BigDecimal percent;
-    private Product product;
-    private Integer totalQuantity;
+    private final String name;
+    private final BigDecimal percent;
+    private final Product product;
+    private final Integer totalQuantity;
 
     Offer(String name, BigDecimal percent, Product product, Integer totalQuantity) {
         this.name = name;
