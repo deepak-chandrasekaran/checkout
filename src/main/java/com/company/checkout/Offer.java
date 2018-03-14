@@ -21,11 +21,32 @@ public class Offer {
 
 
     BigDecimal computeDiscountedPrice() {
-        return null;
+        int reminder;
+        switch (name) {
+            case BUY1_GET1_FREE:
+                reminder = totalQuantity % 2;
+                return getDiscountedPrice(reminder);
+            case BUY3_FOR_THE_PRICE_OF2:
+                reminder = totalQuantity % 3;
+                return getDiscountedPrice(reminder);
+            default:
+                throw new IllegalArgumentException("Invalid offer code");
+        }
     }
 
+    private BigDecimal getDiscountedPrice(int reminder) {
+        BigDecimal discountedPrice;
+        discountedPrice = (product.price).multiply(percent);
+        if (reminder == 0) {
+            return new BigDecimal(totalQuantity).multiply(discountedPrice).setScale(2, BigDecimal.ROUND_HALF_UP);
+        } else {
+            return new BigDecimal(totalQuantity - reminder)
+                    .multiply(discountedPrice).add((product.price)
+                            .multiply(new BigDecimal(reminder))).setScale(2, BigDecimal.ROUND_HALF_UP);
+        }
+    }
 
-    public Product getProduct() {
+    Product getProduct() {
         return product;
     }
 
