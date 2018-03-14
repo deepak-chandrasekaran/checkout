@@ -19,6 +19,45 @@ public class TrolleyPriceCalculatorTest {
     }
 
     @Test
+    public void shouldReturnCheckoutPriceWithExcludingNull() {
+        //Given
+        ArrayList<String> trolleyItems = new ArrayList<>(Arrays.asList("APPLE", "APPLE", "ORANGE", null));
+        BigDecimal expectedResult = new BigDecimal("0.85");
+
+        //When
+        BigDecimal actual = trolleyPriceCalculator.computeCheckoutPrice(trolleyItems);
+
+        //Then
+        Assert.assertTrue(expectedResult.compareTo(actual) == 0);
+    }
+
+    @Test
+    public void shouldReturnCheckoutPriceWithAllNull() {
+        //Given
+        ArrayList<String> trolleyItems = new ArrayList<>(Arrays.asList(null, null));
+        BigDecimal expectedResult = new BigDecimal("0.0");
+
+        //When
+        BigDecimal actual = trolleyPriceCalculator.computeCheckoutPrice(trolleyItems);
+
+        //Then
+        Assert.assertTrue(expectedResult.compareTo(actual) == 0);
+    }
+
+    @Test
+    public void shouldReturnCheckoutPriceWithEmptyString() {
+        //Given
+        ArrayList<String> trolleyItems = new ArrayList<>(Arrays.asList(" "));
+        BigDecimal expectedResult = new BigDecimal("0.0");
+
+        //When
+        BigDecimal actual = trolleyPriceCalculator.computeCheckoutPrice(trolleyItems);
+
+        //Then
+        Assert.assertTrue(expectedResult.compareTo(actual) == 0);
+    }
+
+    @Test
     public void shouldReturnCheckoutPriceWithOfferOnOneProduct() {
         //Given
         ArrayList<String> trolleyItems = new ArrayList<>(Arrays.asList("APPLE", "APPLE", "ORANGE"));
