@@ -24,4 +24,9 @@ public class Offer {
         return null;
     }
 
+
+    public Product getProduct() {
+        return product;
+    }
+
 }
